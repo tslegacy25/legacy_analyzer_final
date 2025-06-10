@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { runAnalysis } from "./runAnalysis.js";
 
 export default function Home() {
   const [dealType, setDealType] = useState("Mobile Home Park");
@@ -9,28 +10,13 @@ export default function Home() {
   const handleFileUpload = (event) => {
     const uploadedFile = event.target.files[0];
     setFile(uploadedFile);
-    runAnalysis(manualInput.units, manualInput.annualCashFlow);
-  };
-
-  const runAnalysis = (units, annualCashFlow) => {
-    const monthlyCashFlowPerUnit = annualCashFlow / 12 / units;
-    const dealScore =
-      monthlyCashFlowPerUnit >= 200
-        ? "4/5 – Strong value-add with seller financing"
-        : "2/5 – Fails cash flow target of $200/unit/mo";
-
-    setResults({
-      capRate: "14.1%",
-      cashFlow: `$${annualCashFlow.toLocaleString()}/year`,
-      cocReturn: "14.15%",
-      balloon: "$446,699 (Yr 5)",
-      dealScore: dealScore,
-      monthlyPerUnit: `$${monthlyCashFlowPerUnit.toFixed(2)}`
-    });
+    const analysis = runAnalysis(manualInput.units, manualInput.annualCashFlow);
+    setResults(analysis);
   };
 
   const handleManualSubmit = () => {
-    runAnalysis(manualInput.units, manualInput.annualCashFlow);
+    const analysis = runAnalysis(manualInput.units, manualInput.annualCashFlow);
+    setResults(analysis);
   };
 
   return (
